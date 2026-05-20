@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: #1a1a2e;
+            color: #ffffff;
+            padding: 16px;
+        }
+        
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 24px;
+        }
+        
+        .header h1 {
+            color: #e94560;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+        
+        .header p {
+            color: #a0a0b0;
+            font-size: 14px;
+        }
+        
+        .product-card {
+            background: #16213e;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 24px;
+        }
+        
+        .product-card h2 {
+            color: #e94560;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        
+        .product-card .features {
+            color: #a0a0b0;
+            font-size: 13px;
+            line-height: 1.6;
+            margin-bottom: 12px;
+        }
+        
+        .product-card .price {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4ecca3;
+            text-align: center;
+        }
+        
+        .form-group {
+            margin-bottom: 16px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 6px;
+            color: #a0a0b0;
+            font-size: 13px;
+            font-weight: 500;
+        }
+        
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px 14px;
+            border: 2px solid #0f3460;
+            border-radius: 12px;
+            background: #0f3460;
+            color: #ffffff;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+        
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #e94560;
+            background: #1a1a4e;
+        }
+        
+        .form-group textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border: none;
+            border-radius: 14px;
+            font-size: 17px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            margin-bottom: 10px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #e94560, #c23152);
+            color: white;
+        }
+        
+        .btn-primary:active {
+            transform: scale(0.98);
+            opacity: 0.9;
+        }
+        
+        .btn-primary:disabled {
+            background: #555;
+            cursor: not-allowed;
+        }
+        
+        .error {
+            color: #e94560;
+            font-size: 12px;
+            margin-top: 4px;
+            display: none;
+        }
+        
+        .success-message {
+            background: #16213e;
+            border: 2px solid #4ecca3;
+            border-radius: 16px;
+            padding: 30px 20px;
+            text-align: center;
+            display: none;
+        }
+        
+        .success-message .icon {
+            font-size: 50px;
+            margin-bottom: 16px;
+        }
+        
+        .success-message h2 {
+            color: #4ecca3;
+            margin-bottom: 8px;
+        }
+        
+        .success-message p {
+            color: #a0a0b0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="form-container">
+        <div class="header">
+            <h1>📡 Netcraze NC-1121</h1>
+            <p>Оформление заказа</p>
+        </div>
+        
+        <div class="product-card">
+            <h2>Роутер Netcraze NC-1121</h2>
+            <div class="features">
+                ✅ Wi-Fi 6 | 3000 Мбит/с<br>
+                ✅ VPN из коробки<br>
+                ✅ 4 гигабитных LAN порта<br>
+                ✅ Простая настройка
+            </div>
+            <div class="price">9 800 ₽</div>
+        </div>
+        
+        <div class="form-group">
+            <label>👤 Имя и Фамилия</label>
+            <input type="text" id="fullName" placeholder="Иван Петров">
+            <div class="error" id="nameError">Введите имя и фамилию</div>
+        </div>
+        
+        <div class="form-group">
+            <label>📞 Телефон</label>
+            <input type="tel" id="phone" placeholder="+7 999 123-45-67">
+            <div class="error" id="phoneError">Введите номер телефона</div>
+        </div>
+        
+        <div class="form-group">
+            <label>📍 Адрес доставки</label>
+            <textarea id="address" placeholder="Город, улица, дом, квартира"></textarea>
+            <div class="error" id="addressError">Введите адрес доставки</div>
+        </div>
+        
+        <button class="btn btn-primary" id="submitBtn" onclick="submitOrder()">
+            💳 Оплатить 9 800 ₽
+        </button>
+    </div>
+    
+    <div class="success-message" id="success-message">
+        <div class="icon">✅</div>
+        <h2>Данные отправлены!</h2>
+        <p>Сейчас вы будете перенаправлены на оплату</p>
+    </div>
+    
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        
+        function validateForm() {
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            
+            let isValid = true;
+            
+            // Проверка имени
+            if (fullName.length < 3) {
+                document.getElementById('nameError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('nameError').style.display = 'none';
+            }
+            
+            // Проверка телефона
+            if (phone.length < 7) {
+                document.getElementById('phoneError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('phoneError').style.display = 'none';
+            }
+            
+            // Проверка адреса
+            if (address.length < 5) {
+                document.getElementById('addressError').style.display = 'block';
+                isValid = false;
+            } else {
+                document.getElementById('addressError').style.display = 'none';
+            }
+            
+            return isValid;
+        }
+        
+        function submitOrder() {
+            if (!validateForm()) return;
+            
+            const btn = document.getElementById('submitBtn');
+            btn.disabled = true;
+            btn.textContent = '⏳ Отправка...';
+            
+            const fullName = document.getElementById('fullName').value.trim();
+            const phone = document.getElementById('phone').value.trim();
+            const address = document.getElementById('address').value.trim();
+            
+            const data = {
+                fullName: fullName,
+                phone: phone,
+                address: address
+            };
+            
+            // Показываем успех
+            document.getElementById('form-container').style.display = 'none';
+            document.getElementById('success-message').style.display = 'block';
+            
+            // Отправляем данные в бота
+            tg.sendData(JSON.stringify(data));
+            
+            // Закрываем WebApp через 1.5 секунды
+            setTimeout(() => {
+                tg.close();
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
