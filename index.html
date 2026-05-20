@@ -16,7 +16,7 @@
         .card h3 { font-size: 16px; margin-bottom: 10px; }
         .card p { color: #999; font-size: 13px; line-height: 1.5; }
         .price-tag { font-size: 22px; font-weight: bold; color: #4ecca3; }
-        .btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 10px; text-align: center; transition: 0.2s; }
+        .btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 10px; text-align: center; }
         .btn-primary { background: #e94560; color: #fff; }
         .btn-outline { background: transparent; border: 2px solid #e94560; color: #e94560; }
         .btn-success { background: #4ecca3; color: #000; }
@@ -28,7 +28,7 @@
         .form-group input:focus, .form-group select:focus { outline: none; border-color: #e94560; }
         .form-group select { appearance: none; cursor: pointer; }
         .radio-group { display: flex; flex-wrap: wrap; gap: 10px; }
-        .radio-card { flex: 1; min-width: 45%; background: #0a0a20; border: 2px solid #1e1e3a; border-radius: 12px; padding: 14px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .radio-card { flex: 1; min-width: 45%; background: #0a0a20; border: 2px solid #1e1e3a; border-radius: 12px; padding: 14px; text-align: center; cursor: pointer; }
         .radio-card.selected { border-color: #e94560; background: #1a1a3a; }
         .radio-card .duration { font-size: 17px; font-weight: bold; }
         .radio-card .price { color: #4ecca3; font-size: 15px; margin-top: 4px; }
@@ -38,10 +38,28 @@
         .checkout-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1e1e3a; font-size: 14px; }
         .checkout-total { font-size: 20px; font-weight: bold; color: #4ecca3; text-align: right; padding-top: 10px; }
         .mt-10 { margin-top: 10px; }
-        .mb-20 { margin-bottom: 20px; }
-        .country-option { display: flex; align-items: center; gap: 10px; padding: 10px; background: #0a0a20; border: 2px solid #1e1e3a; border-radius: 10px; margin-bottom: 8px; cursor: pointer; }
+        .country-option { 
+            display: flex; 
+            align-items: center; 
+            gap: 12px; 
+            padding: 12px 14px; 
+            background: #0a0a20; 
+            border: 2px solid #1e1e3a; 
+            border-radius: 10px; 
+            margin-bottom: 8px; 
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .country-option:hover { border-color: #555; }
         .country-option.selected { border-color: #e94560; background: #1a1a3a; }
-        .country-flag { font-size: 24px; }
+        .country-flag { 
+            width: 32px; 
+            height: 22px; 
+            border-radius: 4px; 
+            object-fit: cover;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.3);
+        }
+        .country-name { font-size: 15px; }
     </style>
 </head>
 <body>
@@ -60,7 +78,7 @@
     <div class="card" onclick="showScreen('screen-vpn-protocol')" style="cursor:pointer">
         <h3>🔑 VPN Ключи</h3>
         <p>VLESS • WireGuard • AmneziaWG</p>
-        <div class="price-tag mt-10">от 350 ₽/мес</div>
+        <div class="price-tag mt-10">от 300 ₽/мес</div>
     </div>
     <button class="btn btn-outline" onclick="showScreen('screen-about')">ℹ️ О нас</button>
 </div>
@@ -71,33 +89,44 @@
     <div class="card">
         <h3>📡 Netcraze NC-1121</h3>
         <div class="features">
-            <span class="feature">Wi-Fi 6</span><span class="feature">3000 Мбит/с</span>
-            <span class="feature">VPN</span><span class="feature">4×LAN</span>
+            <span class="feature">Wi-Fi 6</span>
+            <span class="feature">3000 Мбит/с</span>
+            <span class="feature">VPN</span>
+            <span class="feature">4×LAN</span>
         </div>
         <div class="price-tag mt-10">9 800 ₽</div>
     </div>
     <div class="card">
         <h3>📝 Данные для доставки</h3>
-        <div class="form-group"><label>Имя и Фамилия</label><input type="text" id="r-name" placeholder="Иван Петров"></div>
-        <div class="form-group"><label>Телефон</label><input type="tel" id="r-phone" placeholder="+7 999 123-45-67"></div>
-        <div class="form-group"><label>Адрес доставки</label><input type="text" id="r-address" placeholder="Город, улица, дом, кв."></div>
+        <div class="form-group">
+            <label>Имя и Фамилия</label>
+            <input type="text" id="r-name" placeholder="Иван Петров">
+        </div>
+        <div class="form-group">
+            <label>Телефон</label>
+            <input type="tel" id="r-phone" placeholder="+7 999 123-45-67">
+        </div>
+        <div class="form-group">
+            <label>Адрес доставки</label>
+            <input type="text" id="r-address" placeholder="Город, улица, дом, кв.">
+        </div>
         <button class="btn btn-primary" onclick="orderRouter()">💳 Оплатить 9 800 ₽</button>
     </div>
 </div>
 
-<!-- ВЫБОР ПРОТОКОЛА VPN -->
+<!-- ВЫБОР ПРОТОКОЛА -->
 <div class="screen" id="screen-vpn-protocol">
     <button class="btn btn-outline btn-small" onclick="showScreen('screen-main')">← Назад</button>
     <div class="card" onclick="selectProtocol('vless')" style="cursor:pointer">
-        <h3>🌐 VLESS — 350₽/мес</h3>
-        <p>14 стран на выбор</p>
+        <h3>🌐 VLESS — 300₽/мес</h3>
+        <p>14 стран</p>
     </div>
     <div class="card" onclick="selectProtocol('wireguard')" style="cursor:pointer">
-        <h3>🔒 WireGuard — 400₽/мес</h3>
+        <h3>🔒 WireGuard — 350₽/мес</h3>
         <p>Нидерланды</p>
     </div>
     <div class="card" onclick="selectProtocol('amneziawg')" style="cursor:pointer">
-        <h3>🛡️ AmneziaWG — 400₽/мес</h3>
+        <h3>🛡️ AmneziaWG — 350₽/мес</h3>
         <p>Казахстан, Нидерланды, Россия, Турция</p>
     </div>
 </div>
@@ -109,7 +138,7 @@
     <div id="country-list"></div>
 </div>
 
-<!-- ВЫБОР ОС -->
+<!-- ВЫБОР ОС И СРОКА -->
 <div class="screen" id="screen-os">
     <button class="btn btn-outline btn-small" onclick="showScreen('screen-country')">← Назад</button>
     <div class="card">
@@ -124,19 +153,23 @@
     <div class="card">
         <h3>⏱️ Срок подписки</h3>
         <div class="radio-group" id="duration-group">
-            <div class="radio-card selected" onclick="selectDuration('1month', this)" data-duration="1month">
-                <div class="duration">1 месяц</div><div class="price" id="price-1month">350 ₽</div>
+            <div class="radio-card selected" onclick="selectDuration('1month', this)">
+                <div class="duration">1 месяц</div>
+                <div class="price" id="price-1month">300 ₽</div>
             </div>
-            <div class="radio-card" onclick="selectDuration('3months', this)" data-duration="3months">
-                <div class="duration">3 месяца</div><div class="price" id="price-3months">945 ₽</div>
+            <div class="radio-card" onclick="selectDuration('3months', this)">
+                <div class="duration">3 месяца</div>
+                <div class="price" id="price-3months">810 ₽</div>
                 <div class="sale">-10%</div>
             </div>
-            <div class="radio-card" onclick="selectDuration('6months', this)" data-duration="6months">
-                <div class="duration">6 месяцев</div><div class="price" id="price-6months">1680 ₽</div>
+            <div class="radio-card" onclick="selectDuration('6months', this)">
+                <div class="duration">6 месяцев</div>
+                <div class="price" id="price-6months">1440 ₽</div>
                 <div class="sale">-20%</div>
             </div>
-            <div class="radio-card" onclick="selectDuration('1year', this)" data-duration="1year">
-                <div class="duration">1 год</div><div class="price" id="price-1year">2940 ₽</div>
+            <div class="radio-card" onclick="selectDuration('1year', this)">
+                <div class="duration">1 год</div>
+                <div class="price" id="price-1year">2520 ₽</div>
                 <div class="sale">-30%</div>
             </div>
         </div>
@@ -161,7 +194,7 @@
     <div class="card">
         <h3>ℹ️ NetVault</h3>
         <p>Сетевое оборудование и VPN ключи</p>
-        <p class="mt-10">📡 Роутер NC-1121 — 9 800 ₽<br>🌐 VLESS — от 350 ₽/мес<br>🔒 WireGuard — от 400 ₽/мес<br>🛡️ AmneziaWG — от 400 ₽/мес</p>
+        <p class="mt-10">📡 Роутер NC-1121 — 9 800 ₽<br>🌐 VLESS — 300 ₽/мес<br>🔒 WireGuard — 350 ₽/мес<br>🛡️ AmneziaWG — 350 ₽/мес</p>
         <p class="mt-10">📞 Поддержка: @yng_beko</p>
     </div>
 </div>
@@ -170,25 +203,36 @@
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    // Данные стран
+    // Страны с флагами-картинками
     const countries = {
         vless: [
-            {name: 'Армения', flag: '🇦🇲'}, {name: 'Великобритания', flag: '🇬🇧'},
-            {name: 'Греция', flag: '🇬🇷'}, {name: 'Исландия', flag: '🇮🇸'},
-            {name: 'Казахстан', flag: '🇰🇿'}, {name: 'Латвия', flag: '🇱🇻'},
-            {name: 'Литва', flag: '🇱🇹'}, {name: 'Нидерланды', flag: '🇳🇱'},
-            {name: 'Польша', flag: '🇵🇱'}, {name: 'Сербия', flag: '🇷🇸'},
-            {name: 'Турция', flag: '🇹🇷'}, {name: 'Финляндия', flag: '🇫🇮'},
-            {name: 'Швейцария', flag: '🇨🇭'}, {name: 'Япония', flag: '🇯🇵'}
+            {name:'Армения',flag:'https://flagcdn.com/w40/am.png'},
+            {name:'Великобритания',flag:'https://flagcdn.com/w40/gb.png'},
+            {name:'Греция',flag:'https://flagcdn.com/w40/gr.png'},
+            {name:'Исландия',flag:'https://flagcdn.com/w40/is.png'},
+            {name:'Казахстан',flag:'https://flagcdn.com/w40/kz.png'},
+            {name:'Латвия',flag:'https://flagcdn.com/w40/lv.png'},
+            {name:'Литва',flag:'https://flagcdn.com/w40/lt.png'},
+            {name:'Нидерланды',flag:'https://flagcdn.com/w40/nl.png'},
+            {name:'Польша',flag:'https://flagcdn.com/w40/pl.png'},
+            {name:'Сербия',flag:'https://flagcdn.com/w40/rs.png'},
+            {name:'Турция',flag:'https://flagcdn.com/w40/tr.png'},
+            {name:'Финляндия',flag:'https://flagcdn.com/w40/fi.png'},
+            {name:'Швейцария',flag:'https://flagcdn.com/w40/ch.png'},
+            {name:'Япония',flag:'https://flagcdn.com/w40/jp.png'}
         ],
-        wireguard: [{name: 'Нидерланды', flag: '🇳🇱'}],
+        wireguard: [
+            {name:'Нидерланды',flag:'https://flagcdn.com/w40/nl.png'}
+        ],
         amneziawg: [
-            {name: 'Казахстан', flag: '🇰🇿'}, {name: 'Нидерланды', flag: '🇳🇱'},
-            {name: 'Россия', flag: '🇷🇺'}, {name: 'Турция', flag: '🇹🇷'}
+            {name:'Казахстан',flag:'https://flagcdn.com/w40/kz.png'},
+            {name:'Нидерланды',flag:'https://flagcdn.com/w40/nl.png'},
+            {name:'Россия',flag:'https://flagcdn.com/w40/ru.png'},
+            {name:'Турция',flag:'https://flagcdn.com/w40/tr.png'}
         ]
     };
 
-    const basePrices = { vless: 350, wireguard: 400, amneziawg: 400 };
+    const basePrices = { vless: 300, wireguard: 350, amneziawg: 350 };
     const durationMultipliers = { '1month': 1, '3months': 3, '6months': 6, '1year': 12 };
     const durationDiscounts = { '1month': 0, '3months': 0.10, '6months': 0.20, '1year': 0.30 };
     const durationNames = { '1month': '1 месяц', '3months': '3 месяца', '6months': '6 месяцев', '1year': '1 год' };
@@ -210,7 +254,7 @@
         countries[protocol].forEach(c => {
             const div = document.createElement('div');
             div.className = 'country-option';
-            div.innerHTML = `<span class="country-flag">${c.flag}</span> <span>${c.name}</span>`;
+            div.innerHTML = `<img src="${c.flag}" class="country-flag" alt="${c.name}"><span class="country-name">${c.name}</span>`;
             div.onclick = () => {
                 document.querySelectorAll('.country-option').forEach(el => el.classList.remove('selected'));
                 div.classList.add('selected');
@@ -220,23 +264,21 @@
             };
             list.appendChild(div);
         });
+        updatePrices();
         showScreen('screen-country');
     }
 
-    function selectDuration(duration, element) {
-        selectedDuration = duration;
+    function selectDuration(dur, el) {
+        selectedDuration = dur;
         document.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
-        element.classList.add('selected');
-        updatePrices();
+        el.classList.add('selected');
     }
 
     function updatePrices() {
         const base = basePrices[selectedProtocol];
         for (const [dur, mult] of Object.entries(durationMultipliers)) {
-            const fullPrice = base * mult;
-            const discount = durationDiscounts[dur];
-            const finalPrice = Math.round(fullPrice * (1 - discount));
-            document.getElementById('price-' + dur).textContent = finalPrice + ' ₽';
+            const price = Math.round(base * mult * (1 - durationDiscounts[dur]));
+            document.getElementById('price-' + dur).textContent = price + ' ₽';
         }
     }
 
@@ -245,43 +287,35 @@
         const phone = document.getElementById('r-phone').value.trim();
         const address = document.getElementById('r-address').value.trim();
         if (!name || !phone || !address) { tg.showAlert('Заполните все поля'); return; }
-        tg.sendData(JSON.stringify({type: 'router', fullName: name, phone: phone, address: address, amount: 9800}));
+        tg.sendData(JSON.stringify({type:'router',fullName:name,phone:phone,address:address,amount:9800}));
         document.body.innerHTML = '<div style="text-align:center;padding:60px 20px"><h2 style="color:#4ecca3">✅ Заказ оформлен!</h2><p style="color:#aaa">Счёт на оплату появится в чате</p></div>';
         setTimeout(() => tg.close(), 2000);
     }
 
     function orderVPN() {
         const base = basePrices[selectedProtocol];
-        const mult = durationMultipliers[selectedDuration];
-        const fullPrice = base * mult;
-        const discount = durationDiscounts[selectedDuration];
-        const finalPrice = Math.round(fullPrice * (1 - discount));
+        const price = Math.round(base * durationMultipliers[selectedDuration] * (1 - durationDiscounts[selectedDuration]));
         const os = document.getElementById('vpn-os').value;
         const osNames = {linux:'🐧 Linux',ios:'🍎 iOS',windows:'🪟 Windows',android:'📱 Android'};
-        const protocolNames = {vless:'VLESS',wireguard:'WireGuard',amneziawg:'AmneziaWG'};
+        const protoNames = {vless:'VLESS',wireguard:'WireGuard',amneziawg:'AmneziaWG'};
         
         document.getElementById('checkout-details').innerHTML = `
-            <div class="checkout-item"><span>Протокол</span><span>${protocolNames[selectedProtocol]}</span></div>
+            <div class="checkout-item"><span>Протокол</span><span>${protoNames[selectedProtocol]}</span></div>
             <div class="checkout-item"><span>Страна</span><span>${selectedCountry}</span></div>
             <div class="checkout-item"><span>ОС</span><span>${osNames[os]}</span></div>
-            <div class="checkout-item"><span>Срок</span><span>${durationNames[selectedDuration]}</span></div>
-            <div class="checkout-item"><span>Скидка</span><span>${Math.round(discount*100)}%</span></div>`;
-        document.getElementById('checkout-total').textContent = finalPrice + ' ₽';
+            <div class="checkout-item"><span>Срок</span><span>${durationNames[selectedDuration]}</span></div>`;
+        document.getElementById('checkout-total').textContent = price + ' ₽';
         showScreen('screen-checkout');
     }
 
     function confirmOrder() {
         const base = basePrices[selectedProtocol];
-        const mult = durationMultipliers[selectedDuration];
-        const fullPrice = base * mult;
-        const discount = durationDiscounts[selectedDuration];
-        const finalPrice = Math.round(fullPrice * (1 - discount));
+        const price = Math.round(base * durationMultipliers[selectedDuration] * (1 - durationDiscounts[selectedDuration]));
         const os = document.getElementById('vpn-os').value;
-        
         tg.sendData(JSON.stringify({
-            type: 'vpn', protocol: selectedProtocol, country: selectedCountry,
-            os: os, duration: selectedDuration, durationName: durationNames[selectedDuration],
-            amount: finalPrice
+            type:'vpn', protocol:selectedProtocol, country:selectedCountry,
+            os:os, duration:selectedDuration, durationName:durationNames[selectedDuration],
+            amount:price
         }));
         document.body.innerHTML = '<div style="text-align:center;padding:60px 20px"><h2 style="color:#4ecca3">✅ Заказ оформлен!</h2><p style="color:#aaa">Ключ придёт после оплаты</p></div>';
         setTimeout(() => tg.close(), 2000);
