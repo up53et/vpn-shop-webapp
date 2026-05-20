@@ -5,275 +5,308 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: -apple-system, sans-serif; background: #0d0d1a; color: #fff; min-height: 100vh; }
         
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #1a1a2e;
-            color: #ffffff;
-            padding: 16px;
-        }
+        .screen { display: none; padding: 20px; max-width: 420px; margin: 0 auto; }
+        .screen.active { display: block; }
         
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-        }
+        .logo { text-align: center; padding: 30px 0 20px; }
+        .logo h1 { color: #e94560; font-size: 26px; }
+        .logo p { color: #888; font-size: 13px; margin-top: 6px; }
         
-        .header {
-            text-align: center;
-            margin-bottom: 24px;
-        }
+        .card { background: #12122a; border-radius: 16px; padding: 20px; margin-bottom: 16px; border: 1px solid #1e1e3a; }
+        .card h3 { font-size: 16px; margin-bottom: 10px; }
+        .card p { color: #999; font-size: 13px; line-height: 1.5; }
         
-        .header h1 {
-            color: #e94560;
-            font-size: 24px;
-            margin-bottom: 8px;
-        }
+        .price-tag { font-size: 22px; font-weight: bold; color: #4ecca3; }
+        .old-price { text-decoration: line-through; color: #666; font-size: 14px; }
         
-        .header p {
-            color: #a0a0b0;
-            font-size: 14px;
-        }
+        .btn { display: block; width: 100%; padding: 15px; border: none; border-radius: 12px; font-size: 16px; font-weight: 600; cursor: pointer; margin-bottom: 10px; text-align: center; transition: 0.2s; }
+        .btn-primary { background: #e94560; color: #fff; }
+        .btn-outline { background: transparent; border: 2px solid #e94560; color: #e94560; }
+        .btn-success { background: #4ecca3; color: #000; }
+        .btn-small { padding: 10px; font-size: 14px; }
+        .btn:active { transform: scale(0.97); opacity: 0.85; }
         
-        .product-card {
-            background: #16213e;
-            border-radius: 16px;
-            padding: 20px;
-            margin-bottom: 24px;
-        }
+        .form-group { margin-bottom: 14px; }
+        .form-group label { display: block; color: #aaa; font-size: 12px; margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px; }
+        .form-group input, .form-group select { width: 100%; padding: 13px; background: #0a0a20; border: 2px solid #1e1e3a; border-radius: 10px; color: #fff; font-size: 15px; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #e94560; }
+        .form-group select { appearance: none; cursor: pointer; }
         
-        .product-card h2 {
-            color: #e94560;
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
+        .radio-group { display: flex; flex-wrap: wrap; gap: 10px; }
+        .radio-card { flex: 1; min-width: 45%; background: #0a0a20; border: 2px solid #1e1e3a; border-radius: 12px; padding: 14px; text-align: center; cursor: pointer; transition: 0.2s; }
+        .radio-card.selected { border-color: #e94560; background: #1a1a3a; }
+        .radio-card .duration { font-size: 17px; font-weight: bold; }
+        .radio-card .price { color: #4ecca3; font-size: 15px; margin-top: 4px; }
+        .radio-card .sale { background: #e94560; color: #fff; font-size: 11px; padding: 2px 8px; border-radius: 20px; display: inline-block; margin-top: 4px; }
         
-        .product-card .features {
-            color: #a0a0b0;
-            font-size: 13px;
-            line-height: 1.6;
-            margin-bottom: 12px;
-        }
+        .features { display: flex; flex-wrap: wrap; gap: 8px; margin: 10px 0; }
+        .feature { background: #1a1a3a; padding: 6px 12px; border-radius: 20px; font-size: 12px; color: #ccc; }
         
-        .product-card .price {
-            font-size: 28px;
-            font-weight: bold;
-            color: #4ecca3;
-            text-align: center;
-        }
+        .checkout-item { display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid #1e1e3a; font-size: 14px; }
+        .checkout-total { font-size: 20px; font-weight: bold; color: #4ecca3; text-align: right; padding-top: 10px; }
         
-        .form-group {
-            margin-bottom: 16px;
-        }
+        .badge { background: #e94560; color: #fff; font-size: 11px; padding: 3px 10px; border-radius: 20px; display: inline-block; }
         
-        .form-group label {
-            display: block;
-            margin-bottom: 6px;
-            color: #a0a0b0;
-            font-size: 13px;
-            font-weight: 500;
-        }
-        
-        .form-group input,
-        .form-group textarea {
-            width: 100%;
-            padding: 12px 14px;
-            border: 2px solid #0f3460;
-            border-radius: 12px;
-            background: #0f3460;
-            color: #ffffff;
-            font-size: 15px;
-            transition: all 0.3s;
-        }
-        
-        .form-group input:focus,
-        .form-group textarea:focus {
-            outline: none;
-            border-color: #e94560;
-            background: #1a1a4e;
-        }
-        
-        .form-group textarea {
-            resize: vertical;
-            min-height: 80px;
-        }
-        
-        .btn {
-            width: 100%;
-            padding: 16px;
-            border: none;
-            border-radius: 14px;
-            font-size: 17px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.3s;
-            margin-bottom: 10px;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(135deg, #e94560, #c23152);
-            color: white;
-        }
-        
-        .btn-primary:active {
-            transform: scale(0.98);
-            opacity: 0.9;
-        }
-        
-        .btn-primary:disabled {
-            background: #555;
-            cursor: not-allowed;
-        }
-        
-        .error {
-            color: #e94560;
-            font-size: 12px;
-            margin-top: 4px;
-            display: none;
-        }
-        
-        .success-message {
-            background: #16213e;
-            border: 2px solid #4ecca3;
-            border-radius: 16px;
-            padding: 30px 20px;
-            text-align: center;
-            display: none;
-        }
-        
-        .success-message .icon {
-            font-size: 50px;
-            margin-bottom: 16px;
-        }
-        
-        .success-message h2 {
-            color: #4ecca3;
-            margin-bottom: 8px;
-        }
-        
-        .success-message p {
-            color: #a0a0b0;
-        }
+        .text-center { text-align: center; }
+        .mb-10 { margin-bottom: 10px; }
+        .mb-20 { margin-bottom: 20px; }
+        .mt-10 { margin-top: 10px; }
     </style>
 </head>
 <body>
-    <div class="container" id="form-container">
-        <div class="header">
-            <h1>📡 Netcraze NC-1121</h1>
-            <p>Оформление заказа</p>
+
+<!-- ЭКРАН 1: ГЛАВНОЕ МЕНЮ -->
+<div class="screen active" id="screen-main">
+    <div class="logo">
+        <h1>🛒 NetVault</h1>
+        <p>Роутеры и VPN ключи</p>
+    </div>
+    
+    <div class="card" onclick="showScreen('screen-router')" style="cursor:pointer">
+        <h3>📡 Роутер Netcraze NC-1121</h3>
+        <p>Wi-Fi 6 • 3000 Мбит/с • VPN из коробки</p>
+        <div class="price-tag mt-10">9 800 ₽</div>
+    </div>
+    
+    <div class="card" onclick="showScreen('screen-vpn')" style="cursor:pointer">
+        <h3>🔑 VPN Ключи</h3>
+        <p>VLESS • WireGuard • AmneziaWG</p>
+        <div class="price-tag mt-10">от 350 ₽/мес</div>
+    </div>
+    
+    <button class="btn btn-outline" onclick="showScreen('screen-about')">ℹ️ О нас</button>
+</div>
+
+<!-- ЭКРАН 2: РОУТЕР -->
+<div class="screen" id="screen-router">
+    <button class="btn btn-outline btn-small" onclick="showScreen('screen-main')">← Назад</button>
+    
+    <div class="card">
+        <h3>📡 Netcraze NC-1121</h3>
+        <div class="features">
+            <span class="feature">Wi-Fi 6</span>
+            <span class="feature">3000 Мбит/с</span>
+            <span class="feature">VPN</span>
+            <span class="feature">4×LAN</span>
         </div>
-        
-        <div class="product-card">
-            <h2>Роутер Netcraze NC-1121</h2>
-            <div class="features">
-                ✅ Wi-Fi 6 | 3000 Мбит/с<br>
-                ✅ VPN из коробки<br>
-                ✅ 4 гигабитных LAN порта<br>
-                ✅ Простая настройка
+        <div class="price-tag mt-10">9 800 ₽</div>
+    </div>
+    
+    <div class="card">
+        <h3>📝 Данные для доставки</h3>
+        <div class="form-group">
+            <label>Имя и Фамилия</label>
+            <input type="text" id="r-name" placeholder="Иван Петров">
+        </div>
+        <div class="form-group">
+            <label>Телефон</label>
+            <input type="tel" id="r-phone" placeholder="+7 999 123-45-67">
+        </div>
+        <div class="form-group">
+            <label>Адрес доставки</label>
+            <input type="text" id="r-address" placeholder="Город, улица, дом, кв.">
+        </div>
+        <button class="btn btn-primary" onclick="orderRouter()">💳 Оплатить 9 800 ₽</button>
+    </div>
+</div>
+
+<!-- ЭКРАН 3: VPN -->
+<div class="screen" id="screen-vpn">
+    <button class="btn btn-outline btn-small" onclick="showScreen('screen-main')">← Назад</button>
+    
+    <div class="card">
+        <h3>🔐 Выберите протокол</h3>
+        <select id="vpn-protocol" style="width:100%;padding:13px;background:#0a0a20;border:2px solid #1e1e3a;border-radius:10px;color:#fff;font-size:15px;margin-top:8px">
+            <option value="vless">🌐 VLESS — 350₽/мес</option>
+            <option value="wireguard">🔒 WireGuard — 400₽/мес</option>
+            <option value="amneziawg">🛡️ AmneziaWG — 400₽/мес</option>
+        </select>
+    </div>
+    
+    <div class="card">
+        <h3>🖥️ Операционная система</h3>
+        <select id="vpn-os" style="width:100%;padding:13px;background:#0a0a20;border:2px solid #1e1e3a;border-radius:10px;color:#fff;font-size:15px;margin-top:8px">
+            <option value="linux">🐧 Linux</option>
+            <option value="ios">🍎 iOS / macOS</option>
+            <option value="windows">🪟 Windows</option>
+            <option value="android">📱 Android</option>
+        </select>
+    </div>
+    
+    <div class="card">
+        <h3>⏱️ Срок подписки</h3>
+        <div class="radio-group" id="duration-group">
+            <div class="radio-card" onclick="selectDuration('1month', this)" data-duration="1month">
+                <div class="duration">1 месяц</div>
+                <div class="price" id="price-1month">350 ₽</div>
             </div>
-            <div class="price">9 800 ₽</div>
+            <div class="radio-card" onclick="selectDuration('3months', this)" data-duration="3months">
+                <div class="duration">3 месяца</div>
+                <div class="price" id="price-3months">945 ₽</div>
+                <div class="sale">-10%</div>
+            </div>
+            <div class="radio-card" onclick="selectDuration('6months', this)" data-duration="6months">
+                <div class="duration">6 месяцев</div>
+                <div class="price" id="price-6months">1680 ₽</div>
+                <div class="sale">-20%</div>
+            </div>
+            <div class="radio-card" onclick="selectDuration('1year', this)" data-duration="1year">
+                <div class="duration">1 год</div>
+                <div class="price" id="price-1year">2940 ₽</div>
+                <div class="sale">-30%</div>
+            </div>
         </div>
-        
-        <div class="form-group">
-            <label>👤 Имя и Фамилия</label>
-            <input type="text" id="fullName" placeholder="Иван Петров">
-            <div class="error" id="nameError">Введите имя и фамилию</div>
-        </div>
-        
-        <div class="form-group">
-            <label>📞 Телефон</label>
-            <input type="tel" id="phone" placeholder="+7 999 123-45-67">
-            <div class="error" id="phoneError">Введите номер телефона</div>
-        </div>
-        
-        <div class="form-group">
-            <label>📍 Адрес доставки</label>
-            <textarea id="address" placeholder="Город, улица, дом, квартира"></textarea>
-            <div class="error" id="addressError">Введите адрес доставки</div>
-        </div>
-        
-        <button class="btn btn-primary" id="submitBtn" onclick="submitOrder()">
-            💳 Оплатить 9 800 ₽
-        </button>
     </div>
     
-    <div class="success-message" id="success-message">
-        <div class="icon">✅</div>
-        <h2>Данные отправлены!</h2>
-        <p>Сейчас вы будете перенаправлены на оплату</p>
+    <button class="btn btn-primary" onclick="orderVPN()">💳 Перейти к оплате</button>
+</div>
+
+<!-- ЭКРАН 4: ПОДТВЕРЖДЕНИЕ -->
+<div class="screen" id="screen-checkout">
+    <button class="btn btn-outline btn-small" onclick="showScreen('screen-vpn')">← Назад</button>
+    
+    <div class="card">
+        <h3>🧾 Ваш заказ</h3>
+        <div id="checkout-details"></div>
+        <div class="checkout-total" id="checkout-total">0 ₽</div>
     </div>
     
-    <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
+    <button class="btn btn-success" onclick="confirmOrder()">✅ Подтвердить и оплатить</button>
+</div>
+
+<!-- ЭКРАН 5: О НАС -->
+<div class="screen" id="screen-about">
+    <button class="btn btn-outline btn-small" onclick="showScreen('screen-main')">← Назад</button>
+    
+    <div class="card">
+        <h3>ℹ️ NetVault</h3>
+        <p>Сетевое оборудование и VPN ключи</p>
+        <p style="margin-top:10px">📡 Роутер NC-1121 — 9 800 ₽<br>🌐 VLESS — от 350 ₽/мес<br>🔒 WireGuard — от 400 ₽/мес<br>🛡️ AmneziaWG — от 400 ₽/мес</p>
+        <p style="margin-top:10px">📞 Поддержка: @yng_beko</p>
+    </div>
+</div>
+
+<script>
+    const tg = window.Telegram.WebApp;
+    tg.expand();
+    
+    let selectedDuration = '1month';
+    let selectedProtocol = 'vless';
+    let selectedOS = 'linux';
+    
+    // Цены
+    const basePrices = { vless: 350, wireguard: 400, amneziawg: 400 };
+    const durationMultipliers = { '1month': 1, '3months': 3, '6months': 6, '1year': 12 };
+    const durationDiscounts = { '1month': 0, '3months': 0.10, '6months': 0.20, '1year': 0.30 };
+    const durationNames = { '1month': '1 месяц', '3months': '3 месяца', '6months': '6 месяцев', '1year': '1 год' };
+    
+    function showScreen(id) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+    }
+    
+    function selectDuration(duration, element) {
+        selectedDuration = duration;
+        document.querySelectorAll('.radio-card').forEach(c => c.classList.remove('selected'));
+        element.classList.add('selected');
+        updateVPNPrices();
+    }
+    
+    function updateVPNPrices() {
+        const protocol = document.getElementById('vpn-protocol').value;
+        selectedProtocol = protocol;
+        const base = basePrices[protocol];
         
-        function validateForm() {
-            const fullName = document.getElementById('fullName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const address = document.getElementById('address').value.trim();
-            
-            let isValid = true;
-            
-            // Проверка имени
-            if (fullName.length < 3) {
-                document.getElementById('nameError').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('nameError').style.display = 'none';
-            }
-            
-            // Проверка телефона
-            if (phone.length < 7) {
-                document.getElementById('phoneError').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('phoneError').style.display = 'none';
-            }
-            
-            // Проверка адреса
-            if (address.length < 5) {
-                document.getElementById('addressError').style.display = 'block';
-                isValid = false;
-            } else {
-                document.getElementById('addressError').style.display = 'none';
-            }
-            
-            return isValid;
+        for (const [dur, mult] of Object.entries(durationMultipliers)) {
+            const fullPrice = base * mult;
+            const discount = durationDiscounts[dur];
+            const finalPrice = Math.round(fullPrice * (1 - discount));
+            document.getElementById('price-' + dur).textContent = finalPrice + ' ₽';
+        }
+    }
+    
+    document.getElementById('vpn-protocol').addEventListener('change', updateVPNPrices);
+    document.getElementById('vpn-os').addEventListener('change', function() {
+        selectedOS = this.value;
+    });
+    
+    // Выбор первого элемента по умолчанию
+    document.querySelector('.radio-card').classList.add('selected');
+    
+    function orderRouter() {
+        const name = document.getElementById('r-name').value.trim();
+        const phone = document.getElementById('r-phone').value.trim();
+        const address = document.getElementById('r-address').value.trim();
+        
+        if (!name || !phone || !address) {
+            tg.showAlert('Заполните все поля');
+            return;
         }
         
-        function submitOrder() {
-            if (!validateForm()) return;
-            
-            const btn = document.getElementById('submitBtn');
-            btn.disabled = true;
-            btn.textContent = '⏳ Отправка...';
-            
-            const fullName = document.getElementById('fullName').value.trim();
-            const phone = document.getElementById('phone').value.trim();
-            const address = document.getElementById('address').value.trim();
-            
-            const data = {
-                fullName: fullName,
-                phone: phone,
-                address: address
-            };
-            
-            // Показываем успех
-            document.getElementById('form-container').style.display = 'none';
-            document.getElementById('success-message').style.display = 'block';
-            
-            // Отправляем данные в бота
-            tg.sendData(JSON.stringify(data));
-            
-            // Закрываем WebApp через 1.5 секунды
-            setTimeout(() => {
-                tg.close();
-            }, 1500);
-        }
-    </script>
+        const data = {
+            type: 'router',
+            fullName: name,
+            phone: phone,
+            address: address,
+            amount: 9800
+        };
+        
+        tg.sendData(JSON.stringify(data));
+        document.body.innerHTML = '<div style="text-align:center;padding:60px 20px"><h2 style="color:#4ecca3">✅ Заказ оформлен!</h2><p style="color:#aaa">Счёт на оплату появится в чате</p></div>';
+        setTimeout(() => tg.close(), 2000);
+    }
+    
+    function orderVPN() {
+        const protocol = document.getElementById('vpn-protocol').value;
+        const os = document.getElementById('vpn-os').value;
+        const base = basePrices[protocol];
+        const mult = durationMultipliers[selectedDuration];
+        const fullPrice = base * mult;
+        const discount = durationDiscounts[selectedDuration];
+        const finalPrice = Math.round(fullPrice * (1 - discount));
+        
+        selectedProtocol = protocol;
+        selectedOS = os;
+        
+        const osNames = { linux: '🐧 Linux', ios: '🍎 iOS/macOS', windows: '🪟 Windows', android: '📱 Android' };
+        const protocolNames = { vless: 'VLESS', wireguard: 'WireGuard', amneziawg: 'AmneziaWG' };
+        
+        document.getElementById('checkout-details').innerHTML = `
+            <div class="checkout-item"><span>Протокол</span><span>${protocolNames[protocol]}</span></div>
+            <div class="checkout-item"><span>ОС</span><span>${osNames[os]}</span></div>
+            <div class="checkout-item"><span>Срок</span><span>${durationNames[selectedDuration]}</span></div>
+            <div class="checkout-item"><span>Скидка</span><span>${Math.round(discount*100)}%</span></div>
+        `;
+        document.getElementById('checkout-total').textContent = finalPrice + ' ₽';
+        
+        showScreen('screen-checkout');
+    }
+    
+    function confirmOrder() {
+        const protocol = selectedProtocol;
+        const os = selectedOS;
+        const base = basePrices[protocol];
+        const mult = durationMultipliers[selectedDuration];
+        const fullPrice = base * mult;
+        const discount = durationDiscounts[selectedDuration];
+        const finalPrice = Math.round(fullPrice * (1 - discount));
+        
+        const data = {
+            type: 'vpn',
+            protocol: protocol,
+            os: os,
+            duration: selectedDuration,
+            durationName: durationNames[selectedDuration],
+            amount: finalPrice
+        };
+        
+        tg.sendData(JSON.stringify(data));
+        document.body.innerHTML = '<div style="text-align:center;padding:60px 20px"><h2 style="color:#4ecca3">✅ Заказ оформлен!</h2><p style="color:#aaa">Ключ придёт после оплаты</p></div>';
+        setTimeout(() => tg.close(), 2000);
+    }
+</script>
 </body>
 </html>
